@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#2C1810">
+<title>CLASSE FORMULA</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-deep: #1A0F09;
+    --bg-card: #2C1810;
+    --bg-input: #3D2218;
+    --bg-result: #231209;
+    --accent-gold: #C9A96E;
+    --accent-warm: #E8C99A;
+    --accent-light: #F5E6D0;
+    --text-primary: #F5E6D0;
+    --text-muted: #9A7A62;
+    --text-dim: #6B5040;
+    --border: #4A2E1E;
+    --border-light: #6B4530;
+    --danger: #C0553A;
+    --success: #6B9E6B;
+    --shadow: 0 4px 24px rgba(0,0,0,0.5);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    padding-bottom: 40px;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(180deg, #2C1810 0%, #1A0F09 100%);
+    padding: 28px 20px 20px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+  }
+
+  .header-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 300;
+    letter-spacing: 0.3em;
+    color: var(--accent-gold);
+    text-transform: uppercase;
+  }
+
+  .header-subtitle {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--text-muted);
+    margin-top: 4px;
+    text-transform: uppercase;
+  }
+
+  .header-divider {
+    width: 40px;
+    height: 1px;
+    background: var(--accent-gold);
+    margin: 10px auto 0;
+    opacity: 0.5;
+  }
+
+  /* NAV TABS */
+  .nav-tabs {
+    display: flex;
+    padding: 12px 16px 0;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+
+  .nav-tab {
+    flex-shrink: 0;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Jost', sans-serif;
+    font-weight: 400;
+  }
+  .nav-tab.active {
+    background: var(--accent-gold);
+    color: var(--bg-deep);
+    border-color: var(--accent-gold);
+    font-weight: 500;
+  }
+  .nav-tab-new {
+    border-style: dashed;
+    color: var(--accent-gold);
+    border-color: var(--accent-gold);
+    opacity: 0.7;
+  }
+
+  /* MAIN */
+  .main { padding: 16px; max-width: 480px; margin: 0 auto; }
+
+  /* SECTION */
+  .section {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 14px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .section-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--accent-gold);
+    color: var(--bg-deep);
+    font-size: 13px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .section-title {
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    color: var(--accent-warm);
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+
+  /* TOTAL WEIGHT */
+  .weight-display {
+    background: var(--bg-input);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .weight-input-wrap {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex: 1;
+  }
+
+  .weight-input {
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 42px;
+    font-weight: 300;
+    width: 100%;
+    outline: none;
+    text-align: right;
+    -webkit-appearance: none;
+  }
+
+  .weight-unit {
+    font-size: 18px;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+
+  /* INPUT ROW */
+  .input-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 10px;
+    animation: slideIn 0.2s ease;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .row-num {
+    font-size: 11px;
+    color: var(--text-dim);
+    width: 16px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .text-input {
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    color: var(--text-primary);
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+  .text-input:focus { border-color: var(--accent-gold); }
+  .text-input::placeholder { color: var(--text-dim); font-style: italic; }
+
+  .label-input { flex: 1.2; }
+  .ratio-input { flex: 0.8; text-align: center; }
+  .percent-input { width: 70px; text-align: center; flex-shrink: 0; }
+
+  .del-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-dim);
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+  .del-btn:hover, .del-btn:active { border-color: var(--danger); color: var(--danger); background: rgba(192,85,58,0.1); }
+
+  /* ADD BUTTON */
+  .add-btn {
+    width: 100%;
+    padding: 12px;
+    border: 1px dashed var(--border-light);
+    border-radius: 10px;
+    background: transparent;
+    color: var(--accent-gold);
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    margin-top: 4px;
+    transition: all 0.2s;
+    opacity: 0.8;
+  }
+  .add-btn:hover, .add-btn:active { background: rgba(201,169,110,0.08); opacity: 1; }
+  .add-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  /* RATIO HINT */
+  .ratio-hint {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-align: right;
+    margin-bottom: 12px;
+    letter-spacing: 0.05em;
+  }
+
+  /* RESULT SECTION */
+  .result-section {
+    background: var(--bg-result);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow);
+  }
+
+  .result-header {
+    padding: 14px 20px;
+    background: linear-gradient(90deg, rgba(201,169,110,0.15) 0%, transparent 100%);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .result-arrow {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--accent-gold);
+    color: var(--bg-deep);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+
+  .result-title {
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: var(--accent-warm);
+    text-transform: uppercase;
+  }
+
+  .result-item {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .result-item:last-child { border-bottom: none; }
+
+  .result-label-wrap { flex: 1; min-width: 0; }
+
+  .result-name {
+    font-size: 13px;
+    color: var(--text-primary);
+    font-weight: 400;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .result-percent {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  .result-bar-wrap {
+    flex: 1;
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    max-width: 80px;
+  }
+
+  .result-bar {
+    height: 100%;
+    background: var(--accent-gold);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  .result-bar.oxsi { background: #8AADCB; }
+
+  .result-grams {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 300;
+    color: var(--accent-warm);
+    min-width: 60px;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .result-gram-unit {
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-left: 2px;
+  }
+
+  /* TOTAL BAR */
+  .total-bar {
+    padding: 16px 20px;
+    background: var(--bg-card);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid var(--accent-gold);
+  }
+
+  .total-label {
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: var(--accent-gold);
+    text-transform: uppercase;
+  }
+
+  .total-grams {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 300;
+    color: var(--accent-gold);
+  }
+
+  .total-gram-unit {
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-left: 4px;
+  }
+
+  /* WARNING */
+  .warning {
+    background: rgba(192,85,58,0.12);
+    border: 1px solid rgba(192,85,58,0.4);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 12px;
+    color: #E07A60;
+    margin-bottom: 14px;
+    letter-spacing: 0.05em;
+    text-align: center;
+    animation: fadeIn 0.3s ease;
+  }
+
+  /* FORMULA NAME */
+  .formula-name-input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    color: var(--accent-warm);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 300;
+    width: 100%;
+    outline: none;
+    padding: 4px 0 8px;
+    letter-spacing: 0.1em;
+  }
+  .formula-name-input::placeholder { color: var(--text-dim); font-style: italic; }
+
+  /* HISTORY LIST */
+  .history-list { padding: 16px; max-width: 480px; margin: 0 auto; display: none; }
+  .history-list.active { display: block; }
+  .main.hidden { display: none; }
+
+  .history-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    animation: fadeIn 0.3s ease;
+  }
+  .history-item:hover, .history-item:active { border-color: var(--accent-gold); }
+
+  .history-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+  }
+
+  .history-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    color: var(--accent-warm);
+    font-weight: 300;
+  }
+
+  .history-date {
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  .history-meta {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .history-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    margin-top: 10px;
+  }
+
+  .action-btn {
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    border: 1px solid;
+    background: transparent;
+    cursor: pointer;
+    font-family: 'Jost', sans-serif;
+    transition: all 0.2s;
+  }
+
+  .action-btn-edit {
+    border-color: var(--accent-gold);
+    color: var(--accent-gold);
+  }
+  .action-btn-edit:active { background: rgba(201,169,110,0.15); }
+
+  .action-btn-del {
+    border-color: var(--danger);
+    color: var(--danger);
+  }
+  .action-btn-del:active { background: rgba(192,85,58,0.15); }
+
+  /* SAVE BUTTON */
+  .save-btn {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #8B6234 0%, #C9A96E 50%, #8B6234 100%);
+    background-size: 200% auto;
+    color: var(--bg-deep);
+    border: none;
+    border-radius: 14px;
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-position 0.4s ease, transform 0.1s;
+    margin-bottom: 14px;
+  }
+  .save-btn:hover { background-position: right center; }
+  .save-btn:active { transform: scale(0.98); }
+
+  /* EMPTY STATE */
+  .empty-state {
+    text-align: center;
+    padding: 50px 20px;
+    color: var(--text-dim);
+  }
+  .empty-icon {
+    font-size: 40px;
+    margin-bottom: 12px;
+    opacity: 0.4;
+  }
+  .empty-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  /* OXSI label */
+  .input-sub-label {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  /* number input tweak */
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
+  input[type=number] { -moz-appearance: textfield; }
+
+  /* Separator */
+  .sep {
+    height: 1px;
+    background: var(--border);
+    margin: 14px 0;
+    opacity: 0.5;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-title">Classe Formula</div>
+  <div class="header-subtitle">Hair Color Calculator</div>
+  <div class="header-divider"></div>
+</div>
+
+<!-- NAV -->
+<div class="nav-tabs" id="navTabs"></div>
+
+<!-- CALCULATOR VIEW -->
+<div class="main" id="calcView">
+  <!-- Formula Name -->
+  <div class="section" style="padding: 16px 20px;">
+    <input class="formula-name-input" id="formulaName" type="text" placeholder="フォーミュラ名（例：Aさん ハイライト）" maxlength="40">
+  </div>
+
+  <!-- ① 仕上がり合計 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div class="section-title">仕上がり合計重量</div>
+    </div>
+    <div class="weight-display">
+      <div class="weight-input-wrap">
+        <input class="weight-input" id="totalWeight" type="number" inputmode="decimal" value="90" min="1" max="9999">
+      </div>
+      <div class="weight-unit">g</div>
+    </div>
+  </div>
+
+  <!-- ② カラー剤比率 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <div class="section-title">カラー剤 — 比率</div>
+    </div>
+    <div class="ratio-hint" id="ratioHint">比率合計: —</div>
+    <div id="colorRows"></div>
+    <button class="add-btn" id="addColorBtn" onclick="addColorRow()">＋ カラー剤を追加</button>
+  </div>
+
+  <!-- ③ オキシ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <div class="section-title">オキシ（酸化剤）</div>
+    </div>
+    <div id="oxsiRows"></div>
+    <button class="add-btn" id="addOxsiBtn" onclick="addOxsiRow()">＋ オキシを追加</button>
+  </div>
+
+  <!-- 結果 -->
+  <div id="warningBox"></div>
+  <div class="result-section" id="resultSection"></div>
+
+  <!-- 保存 -->
+  <button class="save-btn" onclick="saveFormula()">✦ このフォーミュラを保存</button>
+</div>
+
+<!-- HISTORY VIEW -->
+<div class="history-list" id="historyView"></div>
+
+<script>
+// ─── STATE ────────────────────────────────────────────
+let colorRows = [];
+let oxsiRows  = [];
+let formulas  = [];
+let activeTab = 'new'; // 'new' | formula id
+let editingId = null;
+
+const STORAGE_KEY = 'classeFormulas_v1';
+
+// ─── INIT ─────────────────────────────────────────────
+function init() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) formulas = JSON.parse(saved);
+  } catch(e) {}
+  addColorRow(); addColorRow();
+  addOxsiRow();
+  renderTabs();
+  calculate();
+}
+
+// ─── COLOR ROWS ───────────────────────────────────────
+function addColorRow() {
+  if (colorRows.length >= 5) return;
+  // まず現在の入力値をstateに同期してから追加
+  syncColorRowsFromDOM();
+  const id = 'c_' + Date.now();
+  colorRows.push({ id, label: '', ratio: '' });
+  renderColorRows();
+  calculate();
+}
+
+function removeColorRow(id) {
+  if (colorRows.length <= 1) return;
+  syncColorRowsFromDOM();
+  colorRows = colorRows.filter(r => String(r.id) !== String(id));
+  renderColorRows();
+  calculate();
+}
+
+function syncColorRowsFromDOM() {
+  colorRows.forEach(row => {
+    const labelEl = document.querySelector(`[data-color-id="${row.id}"][data-key="label"]`);
+    const ratioEl = document.querySelector(`[data-color-id="${row.id}"][data-key="ratio"]`);
+    if (labelEl) row.label = labelEl.value;
+    if (ratioEl) row.ratio = ratioEl.value;
+  });
+}
+
+function renderColorRows() {
+  const container = document.getElementById('colorRows');
+  container.innerHTML = '';
+  colorRows.forEach((row, i) => {
+    const div = document.createElement('div');
+    div.className = 'input-row';
+    div.innerHTML = `
+      <span class="row-num">${i+1}</span>
+      <input class="text-input label-input" type="text" placeholder="カラー名・番号"
+        data-color-id="${row.id}" data-key="label"
+        value="${esc(row.label)}" oninput="onColorInput('${row.id}','label',this.value)" maxlength="20">
+      <input class="text-input ratio-input" type="number" inputmode="decimal" placeholder="比率"
+        data-color-id="${row.id}" data-key="ratio"
+        value="${row.ratio}" oninput="onColorInput('${row.id}','ratio',this.value)" min="0" step="0.1">
+      ${colorRows.length > 1 ? `<button class="del-btn" onclick="removeColorRow('${row.id}')">×</button>` : '<div style="width:32px"></div>'}
+    `;
+    container.appendChild(div);
+  });
+  document.getElementById('addColorBtn').disabled = colorRows.length >= 5;
+}
+
+function onColorInput(id, key, val) {
+  const r = colorRows.find(r => String(r.id) === String(id));
+  if (r) r[key] = val;
+  calculate();
+}
+
+// ─── OXSI ROWS ────────────────────────────────────────
+function addOxsiRow() {
+  if (oxsiRows.length >= 3) return;
+  syncOxsiRowsFromDOM();
+  const id = 'o_' + Date.now();
+  oxsiRows.push({ id, label: '', percent: '50' });
+  renderOxsiRows();
+  calculate();
+}
+
+function removeOxsiRow(id) {
+  if (oxsiRows.length <= 1) return;
+  syncOxsiRowsFromDOM();
+  oxsiRows = oxsiRows.filter(r => String(r.id) !== String(id));
+  renderOxsiRows();
+  calculate();
+}
+
+function syncOxsiRowsFromDOM() {
+  oxsiRows.forEach(row => {
+    const labelEl = document.querySelector(`[data-oxsi-id="${row.id}"][data-key="label"]`);
+    const pctEl   = document.querySelector(`[data-oxsi-id="${row.id}"][data-key="percent"]`);
+    if (labelEl) row.label   = labelEl.value;
+    if (pctEl)   row.percent = pctEl.value;
+  });
+}
+
+function renderOxsiRows() {
+  const container = document.getElementById('oxsiRows');
+  container.innerHTML = '';
+  oxsiRows.forEach((row, i) => {
+    const div = document.createElement('div');
+    div.className = 'input-row';
+    div.innerHTML = `
+      <span class="row-num">${i+1}</span>
+      <input class="text-input label-input" type="text" placeholder="種類（例: 6%オキシ）"
+        data-oxsi-id="${row.id}" data-key="label"
+        value="${esc(row.label)}" oninput="onOxsiInput('${row.id}','label',this.value)" maxlength="20">
+      <input class="text-input percent-input" type="number" inputmode="decimal" placeholder="%"
+        data-oxsi-id="${row.id}" data-key="percent"
+        value="${row.percent}" oninput="onOxsiInput('${row.id}','percent',this.value)" min="0" max="200" step="5">
+      <span style="font-size:13px;color:var(--text-muted);flex-shrink:0">%</span>
+      ${oxsiRows.length > 1 ? `<button class="del-btn" onclick="removeOxsiRow('${row.id}')">×</button>` : '<div style="width:32px"></div>'}
+    `;
+    container.appendChild(div);
+  });
+  document.getElementById('addOxsiBtn').disabled = oxsiRows.length >= 3;
+}
+
+function onOxsiInput(id, key, val) {
+  const r = oxsiRows.find(r => String(r.id) === String(id));
+  if (r) r[key] = val;
+  calculate();
+}
+
+// ─── CALCULATE ────────────────────────────────────────
+function calculate() {
+  const total = parseFloat(document.getElementById('totalWeight').value) || 0;
+  const ratios = colorRows.map(r => parseFloat(r.ratio) || 0);
+  const ratioSum = ratios.reduce((a, b) => a + b, 0);
+
+  // update hint
+  const hint = document.getElementById('ratioHint');
+  if (ratioSum === 0) {
+    hint.textContent = '比率合計: — （比率を入力してください）';
+    hint.style.color = 'var(--text-dim)';
+  } else {
+    hint.textContent = `比率合計: ${ratioSum}`;
+    hint.style.color = 'var(--text-muted)';
+  }
+
+  // oxsi totals
+  const oxsiPercents = oxsiRows.map(r => parseFloat(r.percent) || 0);
+  const oxsiTotalPct = oxsiPercents.reduce((a, b) => a + b, 0);
+  const colorTotalG  = total * (1 - oxsiTotalPct / 100);
+  const oxsiGrams    = oxsiRows.map(r => total * ((parseFloat(r.percent) || 0) / 100));
+  const colorGrams   = ratioSum === 0 ? ratios.map(() => 0) : ratios.map(r => colorTotalG * (r / ratioSum));
+
+  // warning
+  const warnBox = document.getElementById('warningBox');
+  const sumCheck = colorGrams.reduce((a,b)=>a+b,0) + oxsiGrams.reduce((a,b)=>a+b,0);
+  if (Math.abs(sumCheck - total) > 0.5 && total > 0 && ratioSum > 0) {
+    warnBox.innerHTML = `<div class="warning">⚠ 合計 ${sumCheck.toFixed(1)}g が目標 ${total}g と一致しません<br><span style="font-size:11px;opacity:0.7">オキシの割合を確認してください</span></div>`;
+  } else {
+    warnBox.innerHTML = '';
+  }
+
+  // result
+  const rs = document.getElementById('resultSection');
+  if (total === 0 || ratioSum === 0) { rs.innerHTML = ''; return; }
+
+  let html = `
+    <div class="result-header">
+      <div class="result-arrow">→</div>
+      <div class="result-title">計算結果</div>
+    </div>
+  `;
+
+  // color rows
+  colorRows.forEach((row, i) => {
+    const g = colorGrams[i];
+    const pct = (ratioSum > 0) ? ((ratios[i] / ratioSum) * (100 - oxsiTotalPct)).toFixed(1) : '0.0';
+    const bar = ratioSum > 0 ? (ratios[i] / ratioSum) * 100 : 0;
+    const name = row.label || `カラー剤 ${i+1}`;
+    html += `
+      <div class="result-item">
+        <div class="result-label-wrap">
+          <div class="result-name">${esc(name)}</div>
+          <div class="result-percent">${pct}%</div>
+        </div>
+        <div class="result-bar-wrap"><div class="result-bar" style="width:${bar}%"></div></div>
+        <div class="result-grams">${g.toFixed(1)}<span class="result-gram-unit">g</span></div>
+      </div>`;
+  });
+
+  // separator
+  html += `<div style="height:1px;background:var(--border);margin:0 20px;opacity:0.5"></div>`;
+
+  // oxsi rows
+  oxsiRows.forEach((row, i) => {
+    const g = oxsiGrams[i];
+    const pct = parseFloat(row.percent) || 0;
+    const name = row.label || `オキシ ${i+1}`;
+    html += `
+      <div class="result-item">
+        <div class="result-label-wrap">
+          <div class="result-name" style="color:#A0C4DE">${esc(name)}</div>
+          <div class="result-percent">${pct}%</div>
+        </div>
+        <div class="result-bar-wrap"><div class="result-bar oxsi" style="width:${Math.min(pct,100)}%"></div></div>
+        <div class="result-grams" style="color:#A0C4DE">${g.toFixed(1)}<span class="result-gram-unit">g</span></div>
+      </div>`;
+  });
+
+  // total
+  const grandTotal = colorGrams.reduce((a,b)=>a+b,0) + oxsiGrams.reduce((a,b)=>a+b,0);
+  html += `
+    <div class="total-bar">
+      <div class="total-label">合計</div>
+      <div><span class="total-grams">${grandTotal.toFixed(1)}</span><span class="total-gram-unit">g</span></div>
+    </div>`;
+
+  rs.innerHTML = html;
+}
+
+// ─── SAVE ─────────────────────────────────────────────
+function saveFormula() {
+  syncColorRowsFromDOM();
+  syncOxsiRowsFromDOM();
+  const name = document.getElementById('formulaName').value.trim() || `フォーミュラ ${formulas.length + 1}`;
+  const total = parseFloat(document.getElementById('totalWeight').value) || 0;
+
+  const data = {
+    id: editingId || Date.now(),
+    name,
+    total,
+    colorRows: JSON.parse(JSON.stringify(colorRows)),
+    oxsiRows:  JSON.parse(JSON.stringify(oxsiRows)),
+    savedAt: new Date().toLocaleDateString('ja-JP', {month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})
+  };
+
+  if (editingId) {
+    const idx = formulas.findIndex(f => f.id === editingId);
+    if (idx !== -1) formulas[idx] = data;
+    editingId = null;
+  } else {
+    formulas.unshift(data);
+  }
+
+  persist();
+  renderTabs();
+  activeTab = String(data.id);
+  renderTabs();
+
+  // brief feedback
+  const btn = document.querySelector('.save-btn');
+  btn.textContent = '✓ 保存しました';
+  btn.style.background = 'linear-gradient(135deg,#3D6B3D 0%,#6B9E6B 100%)';
+  setTimeout(() => {
+    btn.textContent = '✦ このフォーミュラを保存';
+    btn.style.background = '';
+  }, 1500);
+}
+
+function persist() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(formulas)); } catch(e) {}
+}
+
+// ─── TABS ─────────────────────────────────────────────
+function renderTabs() {
+  const nav = document.getElementById('navTabs');
+  nav.innerHTML = '';
+
+  // NEW tab
+  const newTab = document.createElement('button');
+  newTab.className = 'nav-tab nav-tab-new' + (activeTab === 'new' ? ' active' : '');
+  newTab.textContent = '＋ 新規';
+  newTab.onclick = () => { activeTab = 'new'; editingId = null; renderTabs(); showCalc(); };
+  nav.appendChild(newTab);
+
+  // History tab
+  const histTab = document.createElement('button');
+  histTab.className = 'nav-tab' + (activeTab === 'history' ? ' active' : '');
+  histTab.textContent = `保存済み (${formulas.length})`;
+  histTab.onclick = () => { activeTab = 'history'; renderTabs(); showHistory(); };
+  nav.appendChild(histTab);
+
+  // Formula tabs (recent 5)
+  formulas.slice(0, 5).forEach(f => {
+    const tab = document.createElement('button');
+    tab.className = 'nav-tab' + (activeTab === String(f.id) ? ' active' : '');
+    tab.textContent = f.name.length > 10 ? f.name.slice(0, 10) + '…' : f.name;
+    tab.onclick = () => { activeTab = String(f.id); renderTabs(); loadFormula(f.id); showCalc(); };
+    nav.appendChild(tab);
+  });
+}
+
+// ─── SHOW VIEWS ───────────────────────────────────────
+function showCalc() {
+  document.getElementById('calcView').classList.remove('hidden');
+  document.getElementById('historyView').classList.remove('active');
+}
+
+function showHistory() {
+  document.getElementById('calcView').classList.add('hidden');
+  document.getElementById('historyView').classList.add('active');
+  renderHistory();
+}
+
+// ─── HISTORY ──────────────────────────────────────────
+function renderHistory() {
+  const view = document.getElementById('historyView');
+  if (formulas.length === 0) {
+    view.innerHTML = `<div class="empty-state"><div class="empty-icon">✦</div><div class="empty-text">保存されたフォーミュラはありません</div></div>`;
+    return;
+  }
+  view.innerHTML = formulas.map(f => `
+    <div class="history-item">
+      <div class="history-item-header">
+        <div class="history-name">${esc(f.name)}</div>
+        <div class="history-date">${f.savedAt || ''}</div>
+      </div>
+      <div class="history-meta">
+        総重量 ${f.total}g &nbsp;|&nbsp; カラー剤 ${f.colorRows.length}種 &nbsp;|&nbsp; オキシ ${f.oxsiRows.length}種
+      </div>
+      <div style="font-size:12px;color:var(--text-muted)">
+        ${f.colorRows.map(r => r.label || 'カラー').join(' / ')}
+      </div>
+      <div class="history-actions">
+        <button class="action-btn action-btn-del" onclick="deleteFormula(${f.id}, event)">削除</button>
+        <button class="action-btn action-btn-edit" onclick="editFormula(${f.id})">編集・使用</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function loadFormula(id) {
+  const f = formulas.find(f => f.id === id);
+  if (!f) return;
+  document.getElementById('formulaName').value = f.name;
+  document.getElementById('totalWeight').value = f.total;
+  colorRows = JSON.parse(JSON.stringify(f.colorRows));
+  oxsiRows  = JSON.parse(JSON.stringify(f.oxsiRows));
+  renderColorRows();
+  renderOxsiRows();
+  calculate();
+}
+
+function editFormula(id) {
+  editingId = id;
+  activeTab = String(id);
+  renderTabs();
+  loadFormula(id);
+  showCalc();
+}
+
+function deleteFormula(id, e) {
+  e.stopPropagation();
+  if (!confirm('このフォーミュラを削除しますか？')) return;
+  formulas = formulas.filter(f => f.id !== id);
+  persist();
+  renderTabs();
+  renderHistory();
+}
+
+// ─── HELPERS ──────────────────────────────────────────
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ─── LIVE CALC ────────────────────────────────────────
+document.getElementById('totalWeight').addEventListener('input', calculate);
+
+// ─── START ────────────────────────────────────────────
+init();
+</script>
+</body>
+</html>
