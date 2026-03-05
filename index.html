@@ -236,9 +236,9 @@
   .text-input:focus { border-color: var(--accent-gold); }
   .text-input::placeholder { color: var(--text-dim); font-style: italic; }
 
-  .label-input { flex: 1.2; }
-  .ratio-input { flex: 0.8; text-align: center; }
-  .percent-input { width: 70px; text-align: center; flex-shrink: 0; }
+  .label-input { flex: 1; min-width: 0; }
+  .ratio-input { width: 60px; flex-shrink: 0; text-align: center; }
+  .percent-input { width: 60px; text-align: center; flex-shrink: 0; }
 
   .del-btn {
     width: 32px;
@@ -580,6 +580,15 @@
     background: var(--border);
     margin: 14px 0;
     opacity: 0.5;
+  }
+
+  /* スマホ向け：入力行のはみ出し防止 */
+  @media (max-width: 390px) {
+    .text-input { padding: 10px 8px; font-size: 13px; }
+    .input-row { gap: 6px; }
+    .del-btn { width: 28px; height: 28px; font-size: 14px; }
+    .ratio-input { width: 52px; }
+    .percent-input { width: 52px; }
   }
 </style>
 </head>
